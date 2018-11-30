@@ -1,3 +1,0 @@
-#lang racket
-
-(require "./project-app-v9.rkt")

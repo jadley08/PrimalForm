@@ -2,12 +2,14 @@
 
   
 (require (for-syntax syntax/parse racket/syntax "./to-primal.rkt")
+         "./match.rkt"
          syntax/parse
          racket/syntax)
   
 (provide (except-out (all-from-out racket)
                      #%datum)
          (rename-out [dat #%datum])
+         (all-from-out "./match.rkt")
          primal-+ primal--
          primal-add1 primal-sub1
          primal->integer integer->primal

@@ -1,5 +1,6 @@
 #lang racket
 (require "to-primal.rkt")
+(provide fac)
 
 #|Matching on a specific prime number|#
 
