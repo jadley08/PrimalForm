@@ -11,8 +11,8 @@ Racket domain specific language that uses integers in their prime factorization 
 
 ### Data Type
 For directly inputting integers in their primal form:
-Literals: ( ) : ^
-Variables: x, w ∈ ℤ; y, z ∈ ℕ
+**Literals**: ( ) : ^
+**Variables**: x, w ∈ ℤ; y, z ∈ ℕ
 
 ```racket
 (x)
