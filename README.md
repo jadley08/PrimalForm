@@ -3,7 +3,7 @@
 
 Racket domain specific language that uses integers in their prime factorization form.
 
-```racket
+```scheme
 (λ (s) s)
 ```
 
