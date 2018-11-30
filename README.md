@@ -9,6 +9,6 @@ Racket domain specific language that uses integers in their prime factorization 
 
 ## Syntax
 
-# Data Type
+### Data Type
 
-# Match
+### Match
