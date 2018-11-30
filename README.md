@@ -14,6 +14,7 @@ For directly inputting integers in their primal form:
 Literals: ( ) : ^
 Variables: x, w ∈ ℤ; y, z ∈ ℕ
 
+```racket
 (x)
 (x y)
 (x : y)
@@ -22,6 +23,7 @@ Variables: x, w ∈ ℤ; y, z ∈ ℕ
 (x ^ y : w)
 (x ^ y : w ^ z)
 (x ^ y w ^ z)
+```
 
 The : is an optional separator of primal divisors of input number.
 The ^ denotes exponentiation from one integer to a Natural.
