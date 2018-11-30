@@ -14,7 +14,7 @@
   (λ (stx)
     (syntax-case stx ()
       [(_ num n m) #`(app (factor num) n m)])))
-
+#;
 (match (integer->primal 90)
     [(fac 2 a b) b]
     
@@ -37,7 +37,7 @@
   (λ (stx)
     (syntax-case stx ()
       [(_ num n m) #`(app (power num) n m)])))
-
+#;
 (match (integer->primal 90)
     [(pow 2 a b) a]
     
@@ -58,7 +58,7 @@
      (values n m)]
     [else ((n-to-the-m n m) (cdr prim))]))
 
-((n-to-the-m ))
+;((n-to-the-m ))
 
 
 

@@ -1,20 +1,18 @@
 #lang racket
 
-(module reader racket
   
   (require (for-syntax syntax/parse racket/syntax "./to-primal.rkt")
            syntax/parse
            racket/syntax
-           (rename-in racket/base (read r:read)
+           #;(rename-in racket/base (read r:read)
                       (read-syntax r:read-syntax)))
-  
   
   (provide (except-out (all-from-out racket)
                        #%datum
                        read
-                       read-syntax))
-  
-  (provide (rename-out [dat #%datum])
+                       read-syntax)
+           (rename-out [dat #%datum])
+           #;
            (rename-out (my-read read) (my-read-syntax read-syntax))
            intersection ∩
            union ∪
@@ -28,20 +26,16 @@
            partition?
            #%app
            ^ neg ¬ zero :)
-
+#;#;
   (define (my-read port) (my-read-syntax #f port))
 
-  (define (my-read-syntax src port) ; c d e f
-    (printf "port : ~a\n" (port->string port))
-    ;`(module primal-form racket ,(r:read-syntax src port))
+  (define (my-read-syntax src port)
     (define v
       (let loop ()
-        (println (list src port))
         (define x (r:read-syntax src port))
         (if (eof-object? x)
             '()
             (cons x (loop)))))
-    (println v)
     `(module primal-form racket ,@v))
   
   (define ^ '^)
@@ -431,8 +425,11 @@
          (append (list (cons (caar fact1) (+ (cdar fact1) (cdar fact2))))
                  (add-helper (cdr fact1) (cdr fact2)))]
         [else (append (list (car fact1))
-                      (add-helper (cdr fact1) fact2))]))))
+                      (add-helper (cdr fact1) fact2))])))
 
 
-(require 'reader)
-;(provide (all-defined-out))
+
+(provide (all-defined-out))
+
+(module reader syntax/module-reader
+  primal-form/main)
