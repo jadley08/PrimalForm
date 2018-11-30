@@ -14,16 +14,6 @@
   (λ (stx)
     (syntax-case stx ()
       [(_ num n m) #`(app (factor num) n m)])))
-#;
-(match (integer->primal 90)
-    [(fac 2 a b) b]
-    
-    [else 'YOUSUCK])
-
-
-; goal syntax
-;[(fac 2) -> ]
-
 
 #|Matching on the power of a num|#
 (define ((power m) prim)
@@ -37,18 +27,6 @@
   (λ (stx)
     (syntax-case stx ()
       [(_ num n m) #`(app (power num) n m)])))
-#;
-(match (integer->primal 90)
-    [(pow 2 a b) a]
-    
-    [else 'YOUSUCK])
-
-#|(define (n-to-the-m n m)
-  (λ (prim)
-    (match prim
-      [`((n . m) . ,rest) (values n m)]
-      [`(,a . ,d) ((n-to-the-m n m) d)]
-      [else (values 'nope 'nay)])))|#
 
 (define ((n-to-the-m n m) prim)
   (cond
@@ -57,9 +35,6 @@
           (equal? (cdar prim) m))
      (values n m)]
     [else ((n-to-the-m n m) (cdr prim))]))
-
-;((n-to-the-m ))
-
 
 
 ;;APP-patteg

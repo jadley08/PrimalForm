@@ -149,30 +149,30 @@
               (3 ^ 7))
 
 ;subtraction
-(check-equal? (subtract (1 ^ 3) (1 ^ 4))
+(check-equal? (primal-/ (1 ^ 3) (1 ^ 4))
               '())
-(check-equal? (÷ (1 ^ 3) (1 ^ 4))
+(check-equal? (primal-/ (1 ^ 3) (1 ^ 4))
               '())
-(check-equal? (÷ (2 ^ 2 : 3 ^ 2)
+(check-equal? (primal-/ (2 ^ 2 : 3 ^ 2)
                   (2 ^ 2 : 3 ^ 2))
               '())
-(check-equal? (subtract (1 ^ 7 : 3 ^ 4 : 7 ^ 3) (1 ^ 6 : 3 ^ 2 : 7 ^ 4))
+(check-equal? (primal-/ (1 ^ 7 : 3 ^ 4 : 7 ^ 3) (1 ^ 6 : 3 ^ 2 : 7 ^ 4))
               '((3 . 2)))
-(check-equal? (÷ (1 ^ 7 : 3 ^ 4 : 7 ^ 3) (1 ^ 6 : 3 ^ 2 : 7 ^ 4))
+(check-equal? (primal-/ (1 ^ 7 : 3 ^ 4 : 7 ^ 3) (1 ^ 6 : 3 ^ 2 : 7 ^ 4))
               '((3 . 2)))
-(check-equal? (÷ (zero) (zero))
+(check-equal? (primal-/ (zero) (zero))
               (zero))
-(check-equal? (÷ (3 ^ 7) (zero))
+(check-equal? (primal-/ (3 ^ 7) (zero))
               (3 ^ 7))
-(check-equal? (÷ (zero) (3 ^ 7))
+(check-equal? (primal-/ (zero) (3 ^ 7))
               (zero))
 
 ;add
-(check-equal? (add (1 ^ 7) (2 ^ 3 : 11 ^ 3) (5 ^ 1))
+(check-equal? (primal-* (1 ^ 7) (2 ^ 3 : 11 ^ 3) (5 ^ 1))
               '((2 . 3) (5 . 1) (11 . 3)))
-(check-equal? (add (2 ^ 3 : 11 ^ 3) ())
+(check-equal? (primal-* (2 ^ 3 : 11 ^ 3) ())
               (2 ^ 3 : 11 ^ 3))
-(check-equal? (add () (2 ^ 3 : 11 ^ 3))
+(check-equal? (primal-* () (2 ^ 3 : 11 ^ 3))
               (2 ^ 3 : 11 ^ 3))
 
 ;partition
@@ -191,9 +191,6 @@
 
 (define lcm 'todo)
 
-(define primal-* ++)
-
-(define primal-/ ÷)
 #; ;wrong at the moment
 (define prime?
   (λ (p)
