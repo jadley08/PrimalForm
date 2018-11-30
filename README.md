@@ -10,9 +10,9 @@ Racket domain specific language that uses integers in their prime factorization 
 ## Syntax
 
 ### Data Type
-For directly inputting integers in their primal form:\n
-**Literals**: ^, :, (, )\n
-**Variables**: x, w ∈ ℤ; y, z ∈ ℕ\n
+For directly inputting integers in their primal form:``\n``
+**Literals**: ^, :, (, )``\n``
+**Variables**: x, w ∈ ℤ; y, z ∈ ℕ``\n``
 
 ```racket
 (x)
