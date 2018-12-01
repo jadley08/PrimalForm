@@ -71,10 +71,6 @@ Want to allow expressions that evaluate to valid integers or naturals to be allo
 (x ^ y)
 ```
 
-### No kidding numbers
-
-### Easy Access to normal integers
-
 ### Print nice representation, not implementation
 
 ### Efficiency
