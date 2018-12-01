@@ -44,3 +44,7 @@ Want to allow expressions that evaluate to valid integers or naturals to be allo
 ```
 
 ### No kidding numbers
+
+### Easy Access to normal integers
+
+### Efficiency
