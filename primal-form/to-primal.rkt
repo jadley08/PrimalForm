@@ -1,6 +1,6 @@
 #lang racket
 
-(provide integer->primal)
+(provide (all-defined-out))
 
 (define integer->primal
   (λ (n)
@@ -48,3 +48,45 @@
 (define divisible?
   (λ (a b)
     (integer? (/ a b))))
+
+(define primal->integer
+  (λ (fact)
+    (cond
+      [(null? fact) 1]
+      [(primal-zero? fact) 0]
+      [else (* (expt (caar fact) (cdar fact)) (primal->integer (cdr fact)))])))
+
+(define primal-zero?
+  (λ (p)
+    (equal? p (list 'zero))))
+(define primal?
+  (λ (fact)
+    (letrec ([helper (λ (fact last)
+                       (cond
+                         [(null? fact) #t]
+                         [(primal-zero? fact) #t]
+                         [(equal? -1 (caar fact))
+                          (and (equal? 1 (cdar fact))
+                               (helper (cdr fact) -1))]
+                         [else (and (natural-prime? (caar fact))
+                                    (> (caar fact) last)
+                                    (natural? (cdar fact))
+                                    (helper (cdr fact) (caar fact)))]))])
+      (helper fact 0))))
+
+(define natural-prime?
+  (λ (num)
+    (letrec ([helper
+              (λ (num num-root cur)
+                (cond
+                  [(> cur num-root) #t]
+                  [else (and (not (divisible? num cur))
+                             (helper num num-root (add1 cur)))]))])
+      (and (natural? num)
+           (or (< num 3)
+               (helper num (sqrt 7) 2))))))
+
+(define (int-or-primal->int n)
+  (if (integer? n)
+      n
+      (primal->integer n)))
