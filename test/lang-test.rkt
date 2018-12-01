@@ -188,10 +188,16 @@
 ;normal racket stuff still works
 (check-equal? ((λ () 42)) '((2 . 1) (3 . 1) (7 . 1)))
 
-;!
-(check-equal? (! 1234567890987654321)
+;int
+(check-equal? (int 7)
+              (caar 7))
+
+;!t
+(check-equal? (!t 1234567890987654321)
               '((1234567890987654321 . 1)))
-(check-equal? (! ¬ 2)
+(check-equal? (!t asdfghjkl : qwertyuiop ^ zxcvbnm)
+              '((asdfghjkl . 1) (qwertyuiop . zxcvbnm)))
+(check-equal? (!t ¬ 2)
               '((-1 . 1) (2 . 1)))
-(check-equal? (! 11 22 33 : 44 55 ^ 66 77 ^ 88 : 99)
+(check-equal? (!t 11 22 33 : 44 55 ^ 66 77 ^ 88 : 99)
               '((11 . 1) (22 . 1) (33 . 1) (44 . 1) (55 . 66) (77 . 88) (99 . 1)))

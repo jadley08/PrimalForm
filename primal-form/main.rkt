@@ -26,6 +26,15 @@
          partition?
          #%app)
 
+(define-for-syntax no-kidding-operator '!t)
+(define-for-syntax negation-operator1  'neg)
+(define-for-syntax negation-operator2  '¬)
+(define-for-syntax integer-operator    'int)
+(define            separator-symbol    ':)
+(define            power-symbol        '^)
+(define            zero-symbol         'zero)
+(define-for-syntax zero-symbol         'zero)
+
 (define-syntax (dat stx)
   (syntax-parse stx
     [(_ . n:integer)
@@ -36,30 +45,30 @@
 (define-syntax (#%app stx)
   (syntax-parse stx
     [(_ int i)
-     #:when (equal? 'int (syntax-e #'int))
+     #:when (equal? integer-operator (syntax-e #'int))
      (if (integer? (syntax-e #'i))
          #''i
          (raise-syntax-error #f "expected an integer" #'i))]
     [(_ zero)
-     #:when (equal? 'zero (syntax-e #'zero))
-     #'(list 'zero)]
+     #:when (equal? zero-symbol (syntax-e #'zero))
+     #'(list zero-symbol)]
     [(_ ! n rest ...)
      #:when (and
-             (equal? '! (syntax-e #'!))
-             (or (equal? 'neg (syntax-e #'n))
-                 (equal? '¬   (syntax-e #'n))))
+             (equal? no-kidding-operator (syntax-e #'!))
+             (or (equal? negation-operator1 (syntax-e #'n))
+                 (equal? negation-operator2 (syntax-e #'n))))
      #'(cons (cons -1 1) (#%app ! rest ...))]
     [(_ ! rest ...)
-     #:when (equal? '! (syntax-e #'!))
+     #:when (equal? no-kidding-operator (syntax-e #'!))
      #'(base-normalize (!-parse-primal #'(rest ...)))]
     [(_ n rest ...)
      #:when (number? (syntax-e #'n))
      #'(base-normalize (parse-primal #'(n rest ...)))] ;here we can find a way to pass stx to parse-primal to preserve source location
     [(_ n more rest ...)
-     #:when (or (equal? 'neg (syntax-e #'n))
-                (equal? '¬   (syntax-e #'n)))
-     (if (or (equal? 'neg (syntax-e #'more))
-             (equal? '¬   (syntax-e #'more)))
+     #:when (or (equal? negation-operator1 (syntax-e #'n))
+                (equal? negation-operator2 (syntax-e #'n)))
+     (if (or (equal? negation-operator1 (syntax-e #'more))
+             (equal? negation-operator2 (syntax-e #'more)))
          (raise-syntax-error #f "expected only 1 negative identifier" stx) ; #'(more ...)
          #'(cons (cons -1 1) (#%app more rest ...)))]
     [(_) #''()]
@@ -69,7 +78,7 @@
   (λ (stx)
     (syntax-parse stx
       [(: rest ...)
-       #:when (equal? ': (syntax-e #':))
+       #:when (equal? separator-symbol (syntax-e #':))
        (raise-syntax-error #f "bad syntax at : " #':)]
       [()
        '()]
@@ -78,16 +87,16 @@
            (list (cons (syntax-e #'p) 1))
            (raise-syntax-error #f "expected a natural prime number" #'p))]
       [(p ^ n : rest ...)
-       #:when (and (equal? '^ (syntax-e #'^))
-                   (equal? ': (syntax-e #':)))
+       #:when (and (equal? power-symbol (syntax-e #'^))
+                   (equal? separator-symbol (syntax-e #':)))
        (parse-primal #'(p ^ n rest ...))]
       [(p : n rest ...)
-       #:when (equal? ': (syntax-e #':))
+       #:when (equal? separator-symbol (syntax-e #':))
        (if (natural-prime? (syntax-e #'n))
            (parse-primal #'(p n rest ...))
            (raise-syntax-error #f "expected a natural prime number" #'n))]
       [(p ^ n1 n2 rest ...)
-       #:when (and (equal? '^ (syntax-e #'^))
+       #:when (and (equal? power-symbol (syntax-e #'^))
                    (natural-prime? (syntax-e #'p))
                    (natural-prime? (syntax-e #'n2))
                    (>= (syntax-e #'p) (syntax-e #'n2)))
@@ -98,7 +107,7 @@
                    (>= (syntax-e #'p) (syntax-e #'n)))
        (raise-syntax-error #f (format "expected ~s < ~s" (syntax-e #'p) (syntax-e #'n)) #'n)];would like to highlight both p and n, don't know how
       [(p ^ n rest ...)
-       #:when (equal? '^ (syntax-e #'^))
+       #:when (equal? power-symbol (syntax-e #'^))
        (if (natural-prime? (syntax-e #'p))
            (if (natural? (syntax-e #'n))
                (cons (cons (syntax-e #'p) (syntax-e #'n)) (parse-primal #'(rest ...)))
@@ -106,7 +115,7 @@
            (raise-syntax-error #f "expected a natural prime number" #'p))]
       [(p n rest ...)
        (if (natural-prime? (syntax-e #'p))
-           (if (or (equal? ': (syntax-e #'n))
+           (if (or (equal? separator-symbol (syntax-e #'n))
                    (natural? (syntax-e #'n)))
                (cons (cons (syntax-e #'p) 1) (parse-primal #'(n rest ...)))
                (raise-syntax-error #f (format "expected one of (:, ^, natural number) in ~s" (syntax->datum #'n)) #'n))
@@ -121,14 +130,14 @@
       [(p)
        (list (cons (syntax-e #'p) 1))]
       [(p ^ n : rest ...)
-       #:when (and (equal? '^ (syntax-e #'^))
-                   (equal? ': (syntax-e #':)))
+       #:when (and (equal? power-symbol (syntax-e #'^))
+                   (equal? separator-symbol (syntax-e #':)))
        (!-parse-primal #'(p ^ n rest ...))]
       [(p : n rest ...)
-       #:when (equal? ': (syntax-e #':))
+       #:when (equal? separator-symbol (syntax-e #':))
        (!-parse-primal #'(p n rest ...))]
       [(p ^ n rest ...)
-       #:when (equal? '^ (syntax-e #'^))
+       #:when (equal? power-symbol (syntax-e #'^))
        (cons (cons (syntax-e #'p) (syntax-e #'n)) (!-parse-primal #'(rest ...)))]
       [(p n rest ...)
        (cons (cons (syntax-e #'p) 1) (!-parse-primal #'(n rest ...)))]
@@ -139,7 +148,7 @@
   (λ (ls)
     (cond
       [(null? ls) '()]
-      [(primal-zero? ls) (list 'zero)]
+      [(primal-zero? ls) (list zero-symbol)]
       [(equal? 1 (caar ls)) (cdr ls)]
       [else ls])))
 
@@ -150,7 +159,7 @@
     (letrec ([helper (λ (ls)
                        (cond
                          [(null? ls) '()]
-                         [(primal-zero? ls) (list 'zero)]
+                         [(primal-zero? ls) (list zero-symbol)]
                          [(equal? 1 (caar ls)) (cdr ls)]
                          [else (cons (car ls) (normalize (cdr ls)))]))])
       (begin
@@ -197,7 +206,7 @@
 
 (define disjoint?
   (λ (fact1 fact2)
-    (equal? (list 'zero) (cardinality (intersection fact1 fact2)))))
+    (equal? (list zero-symbol) (cardinality (intersection fact1 fact2)))))
 
 
 
@@ -253,7 +262,7 @@
   (λ (fact1 fact2)
     (cond
       [(or (primal-zero? fact1)
-           (primal-zero? fact2)) (list 'zero)]
+           (primal-zero? fact2)) (list zero-symbol)]
       [(null? fact1) '()]
       [else (let* ([fact1-a (car (car fact1))]
                    [fact1-d (cdr (car fact1))]
@@ -329,7 +338,7 @@
 (define primal-/
   (λ (fact1 fact2)
     (cond
-      [(primal-zero? fact1) (list 'zero)]
+      [(primal-zero? fact1) (list zero-symbol)]
       [(primal-zero? fact2) fact1]
       [(null? fact1) '()]
       [(< (caar fact2) (caar fact1))
