@@ -1,15 +1,27 @@
 #lang primal-form
 
-(define twent 20)
+(require rackunit)
 
-(match twent
-  [(fac 3 a b) a]
-  [else "FUCK"])
+(check-equal?
+ (match 30
+   [(fac 3 a b) b]
+   [else "FUCK"])
+ (primal->integer 1))
 
-(match twent
-  [(pow 1 a b) a]
-  [else "FUCK"])
+(check-equal?
+ (match 20
+   [(pow 1 a b) a]
+   [else "FUCK"])
+ (primal->integer 5))
 
-(match twent
-  [(to-the 5 1 a b) a]
-  [else "FUCK"])
+(check-equal?
+ (match 20
+   [(pow 2 a b) a]
+   [else "FUCK"])
+ (primal->integer 2))
+
+(check-equal?
+ (match 20
+   [(to-the 5 1 a b) a]
+   [else "FUCK"])
+ (primal->integer 5))
