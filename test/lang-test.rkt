@@ -185,19 +185,3 @@
 
 ;normal racket stuff still works
 (check-equal? ((λ () 42)) '((2 . 1) (3 . 1) (7 . 1)))
-
-;fun stuff
-(define gcd ∩)
-
-(define lcm 'todo)
-
-#; ;wrong at the moment
-(define prime?
-  (λ (p)
-    (or
-     (null? p)
-     (and
-      (primal? p)
-      (not (primal-zero? p))
-      (zero? (sub1 (cardinality p)))
-      (zero? (sub1 (cdar p)))))))

@@ -59,6 +59,7 @@
 (define primal-zero?
   (λ (p)
     (equal? p (list 'zero))))
+
 (define primal?
   (λ (fact)
     (letrec ([helper (λ (fact last)

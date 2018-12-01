@@ -25,3 +25,9 @@
    [(to-the 5 1 a b) a]
    [else "FUCK"])
  (primal->integer 5))
+
+(check-equal?
+ (match 52
+   [(and (to-the 2 2 a b) (to-the 13 1 c d)) (integer->primal (+ a b c d))]
+   [else 'AAAAA])
+ 18)
