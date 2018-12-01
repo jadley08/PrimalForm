@@ -42,6 +42,11 @@
 
 (define-syntax (#%app stx)
   (syntax-parse stx #:literals (zero)
+    [(_ int i)
+     #:when (equal? 'int (syntax-e #'int))
+     (if (integer? (syntax-e #'i))
+         #''i
+         (raise-syntax-error #f "expected an integer" #'i))]
     [(_ zero) #'(list zero)]
     [(_ n rest ...)
      #:when (number? (syntax-e #'n))
