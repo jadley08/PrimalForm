@@ -1,13 +1,19 @@
 # PrimalForm
 Authors: **Jacob Adley** (jadley08), **Lalo Viduarri** (eduvidau)
 
+
+## Description
 Racket domain specific language that uses integers in their prime factorization form.
 
 
-## Description
-
-
 ## Goal
+
+
+## Setup Instructions
+Download the primal-form directory and all of its contents.
+Use ``raco pkg install`` to install the directory as a package.
+Language line at top of file should be ``#lang primal-form``.
+Good to go!
 
 
 ## Syntax
