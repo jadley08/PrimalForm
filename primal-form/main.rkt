@@ -25,9 +25,8 @@
          disjoint?
          partition?
          #%app
-         ^ neg ¬ zero :)
-  
-(define ^ '^)
+         neg ¬ zero :)
+
 (define neg 'neg)
 (define ¬ '¬)
 (define zero 'zero)
@@ -63,7 +62,7 @@
 
 (define parse-primal
   (λ (stx)
-    (syntax-parse stx #:literals (: ^)
+    (syntax-parse stx #:literals (:)
       [(colon rest ...)
        #:when (equal? ': (syntax-e #'colon))
        (raise-syntax-error #f "bad syntax at : " #'colon)]
@@ -74,13 +73,15 @@
            (list (cons (syntax-e #'p) 1))
            (raise-syntax-error #f "expected a natural prime number" #'p))]
       [(p ^ n : rest ...)
+       #:when (equal? '^ (syntax-e #'^))
        (parse-primal #'(p ^ n rest ...))]
       [(p : n rest ...)
        (if (natural-prime? (syntax-e #'n))
            (parse-primal #'(p n rest ...))
            (raise-syntax-error #f "expected a natural prime number" #'n))]
       [(p ^ n1 n2 rest ...)
-       #:when (and (natural-prime? (syntax-e #'p))
+       #:when (and (equal? '^ (syntax-e #'^))
+                   (natural-prime? (syntax-e #'p))
                    (natural-prime? (syntax-e #'n2))
                    (>= (syntax-e #'p) (syntax-e #'n2)))
        (raise-syntax-error #f (format "expected ~s < ~s" (syntax-e #'p) (syntax-e #'n2)) #'n2)];would like to highlight both p and n2, don't know how
@@ -90,6 +91,7 @@
                    (>= (syntax-e #'p) (syntax-e #'n)))
        (raise-syntax-error #f (format "expected ~s < ~s" (syntax-e #'p) (syntax-e #'n)) #'n)];would like to highlight both p and n, don't know how
       [(p ^ n rest ...)
+       #:when (equal? '^ (syntax-e #'^))
        (if (natural-prime? (syntax-e #'p))
            (if (natural? (syntax-e #'n))
                (cons (cons (syntax-e #'p) (syntax-e #'n)) (parse-primal #'(rest ...)))
