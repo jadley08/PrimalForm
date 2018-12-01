@@ -174,6 +174,8 @@
               (2 ^ 3 : 11 ^ 3))
 (check-equal? (primal-* () (2 ^ 3 : 11 ^ 3))
               (2 ^ 3 : 11 ^ 3))
+(check-equal? (primal-* 1 2)
+              2)
 
 ;partition
 (check-true (partition? (2 ^ 7 : 3 ^ 7) (3 ^ 3) (2 ^ 7 : 3 ^ 4)))

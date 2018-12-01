@@ -7,7 +7,7 @@
 
 
 ;;------------------------------------------------------
-(define ϕ
+(define φ
   (λ (p)
     (letrec ([helper
               (λ (p)
@@ -18,11 +18,11 @@
                            (helper (cdr p)))]))])
       (integer->primal (helper p)))))
 
-(check-equal? (ϕ 352) 160)
-(check-equal? (ϕ 68359375) 46875000)
-(check-equal? (ϕ 667) 616)
-(check-equal? (ϕ 1764) 504)
-(check-equal? (ϕ 1763) 1680)
+(check-equal? (φ 352) 160)
+(check-equal? (φ 68359375) 46875000)
+(check-equal? (φ 667) 616)
+(check-equal? (φ 1764) 504)
+(check-equal? (φ 1763) 1680)
 
 
 ;;------------------------------------------------------
