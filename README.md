@@ -77,6 +77,9 @@ Want to allow expressions that evaluate to valid integers or naturals to be allo
 (x ^ y)
 ```
 
+### Modulo
+Want to define at the top of the file the integers we will be using mod n.
+
 ### Print nice representation, not implementation
 
 ### Efficiency
