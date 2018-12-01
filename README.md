@@ -54,6 +54,7 @@ Does not perform any prime factorization computation.
 ``x ∈ ℤ``
 ```racket
 (int x)
+  → x
 ```
 
 
