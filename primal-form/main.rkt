@@ -25,10 +25,8 @@
          disjoint?
          partition?
          #%app
-         neg ¬ zero :)
+         zero :)
 
-(define neg 'neg)
-(define ¬ '¬)
 (define zero 'zero)
 (define : ':)
 
