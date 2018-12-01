@@ -36,21 +36,21 @@ For directly inputting integers in their primal form:
 The : is an optional separator of primal divisors of input number.
 The ^ denotes exponentiation from one integer to a Natural.
 
-#### No kidding operator !
+#### No kidding operator !t
 Usage of this operator disables checking when making a primal number.
 Increases efficiency for not having to check primality.
 Relies on user not making an error.
 
 ```racket
-(! x)
-(! x y)
-(! x : y)
-(! x ^ y)
-(! x ^ y w)
-(! x ^ y : w)
-(! x ^ y : w ^ z)
-(! x ^ y w ^ z)
-(! ...)
+(!t x)
+(!t x y)
+(!t x : y)
+(!t x ^ y)
+(!t x ^ y w)
+(!t x ^ y : w)
+(!t x ^ y : w ^ z)
+(!t x ^ y w ^ z)
+(!t ...)
 ```
 
 #### The int operator
