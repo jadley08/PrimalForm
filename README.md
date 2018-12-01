@@ -43,4 +43,4 @@ Want to allow expressions that evaluate to valid integers or naturals to be allo
 (x ^ y)
 ```
 
-### No kidding primes
+### No kidding numbers
