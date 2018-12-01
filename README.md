@@ -10,10 +10,10 @@ Racket domain specific language that uses integers in their prime factorization 
 
 
 ## Setup Instructions
-Download the primal-form directory and all of its contents.
-Use ``raco pkg install`` to install the directory as a package.
-Language line at top of file should be ``#lang primal-form``.
-Good to go!
+1. Download the primal-form directory and all of its contents.
+2. Use ``raco pkg install`` to install the directory as a package.
+3. Language line at top of file should be ``#lang primal-form``.
+4. Good to go!
 
 
 ## Syntax
