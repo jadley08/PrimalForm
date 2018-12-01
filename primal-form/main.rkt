@@ -43,6 +43,15 @@
     [(_ zero)
      #:when (equal? 'zero (syntax-e #'zero))
      #'(list 'zero)]
+    [(_ ! n rest ...)
+     #:when (and
+             (equal? '! (syntax-e #'!))
+             (or (equal? 'neg (syntax-e #'n))
+                 (equal? '¬   (syntax-e #'n))))
+     #'(cons (cons -1 1) (#%app ! rest ...))]
+    [(_ ! rest ...)
+     #:when (equal? '! (syntax-e #'!))
+     #'(base-normalize (!-parse-primal #'(rest ...)))]
     [(_ n rest ...)
      #:when (number? (syntax-e #'n))
      #'(base-normalize (parse-primal #'(n rest ...)))] ;here we can find a way to pass stx to parse-primal to preserve source location
@@ -103,6 +112,27 @@
                (raise-syntax-error #f (format "expected one of (:, ^, natural number) in ~s" (syntax->datum #'n)) #'n))
            (raise-syntax-error #f (format "expected a natural prime number at ~s" (syntax->datum #'p)) #'p))]
       [_ (raise-syntax-error #f (format "no matchin clause for ~s in parse-primal" (syntax->datum stx)) stx)])))
+
+(define !-parse-primal
+  (λ (stx)
+    (syntax-parse stx
+      [()
+       '()]
+      [(p)
+       (list (cons (syntax-e #'p) 1))]
+      [(p ^ n : rest ...)
+       #:when (and (equal? '^ (syntax-e #'^))
+                   (equal? ': (syntax-e #':)))
+       (!-parse-primal #'(p ^ n rest ...))]
+      [(p : n rest ...)
+       #:when (equal? ': (syntax-e #':))
+       (!-parse-primal #'(p n rest ...))]
+      [(p ^ n rest ...)
+       #:when (equal? '^ (syntax-e #'^))
+       (cons (cons (syntax-e #'p) (syntax-e #'n)) (!-parse-primal #'(rest ...)))]
+      [(p n rest ...)
+       (cons (cons (syntax-e #'p) 1) (!-parse-primal #'(n rest ...)))]
+      [_ (raise-syntax-error #f (format "no matchin clause for ~s in !-parse-primal" (syntax->datum stx)) stx)])))
 
 ;; assumes primal number is already in primal form, just removes (1 ^ _)
 (define base-normalize
