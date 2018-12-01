@@ -47,4 +47,6 @@ Want to allow expressions that evaluate to valid integers or naturals to be allo
 
 ### Easy Access to normal integers
 
+### Print nice representation, not implementation
+
 ### Efficiency
