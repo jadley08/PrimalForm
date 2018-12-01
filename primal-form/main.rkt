@@ -24,14 +24,7 @@
          cardinality
          disjoint?
          partition?
-         #%app
-         ^ neg ¬ zero :)
-  
-(define ^ '^)
-(define neg 'neg)
-(define ¬ '¬)
-(define zero 'zero)
-(define : ':)
+         #%app)
 
 (define-syntax (dat stx)
   (syntax-parse stx
@@ -41,8 +34,15 @@
     [(_ . e) #''e]))
 
 (define-syntax (#%app stx)
-  (syntax-parse stx #:literals (zero)
-    [(_ zero) #'(list zero)]
+  (syntax-parse stx
+    [(_ int i)
+     #:when (equal? 'int (syntax-e #'int))
+     (if (integer? (syntax-e #'i))
+         #''i
+         (raise-syntax-error #f "expected an integer" #'i))]
+    [(_ zero)
+     #:when (equal? 'zero (syntax-e #'zero))
+     #'(list 'zero)]
     [(_ n rest ...)
      #:when (number? (syntax-e #'n))
      #'(base-normalize (parse-primal #'(n rest ...)))] ;here we can find a way to pass stx to parse-primal to preserve source location
@@ -58,10 +58,10 @@
 
 (define parse-primal
   (λ (stx)
-    (syntax-parse stx #:literals (: ^)
-      [(colon rest ...)
-       #:when (equal? ': (syntax-e #'colon))
-       (raise-syntax-error #f "bad syntax at : " #'colon)]
+    (syntax-parse stx
+      [(: rest ...)
+       #:when (equal? ': (syntax-e #':))
+       (raise-syntax-error #f "bad syntax at : " #':)]
       [()
        '()]
       [(p)
@@ -69,13 +69,17 @@
            (list (cons (syntax-e #'p) 1))
            (raise-syntax-error #f "expected a natural prime number" #'p))]
       [(p ^ n : rest ...)
+       #:when (and (equal? '^ (syntax-e #'^))
+                   (equal? ': (syntax-e #':)))
        (parse-primal #'(p ^ n rest ...))]
       [(p : n rest ...)
+       #:when (equal? ': (syntax-e #':))
        (if (natural-prime? (syntax-e #'n))
            (parse-primal #'(p n rest ...))
            (raise-syntax-error #f "expected a natural prime number" #'n))]
       [(p ^ n1 n2 rest ...)
-       #:when (and (natural-prime? (syntax-e #'p))
+       #:when (and (equal? '^ (syntax-e #'^))
+                   (natural-prime? (syntax-e #'p))
                    (natural-prime? (syntax-e #'n2))
                    (>= (syntax-e #'p) (syntax-e #'n2)))
        (raise-syntax-error #f (format "expected ~s < ~s" (syntax-e #'p) (syntax-e #'n2)) #'n2)];would like to highlight both p and n2, don't know how
@@ -85,6 +89,7 @@
                    (>= (syntax-e #'p) (syntax-e #'n)))
        (raise-syntax-error #f (format "expected ~s < ~s" (syntax-e #'p) (syntax-e #'n)) #'n)];would like to highlight both p and n, don't know how
       [(p ^ n rest ...)
+       #:when (equal? '^ (syntax-e #'^))
        (if (natural-prime? (syntax-e #'p))
            (if (natural? (syntax-e #'n))
                (cons (cons (syntax-e #'p) (syntax-e #'n)) (parse-primal #'(rest ...)))
@@ -104,7 +109,7 @@
   (λ (ls)
     (cond
       [(null? ls) '()]
-      [(primal-zero? ls) (zero)]
+      [(primal-zero? ls) (list 'zero)]
       [(equal? 1 (caar ls)) (cdr ls)]
       [else ls])))
 
@@ -115,7 +120,7 @@
     (letrec ([helper (λ (ls)
                        (cond
                          [(null? ls) '()]
-                         [(primal-zero? ls) (zero)]
+                         [(primal-zero? ls) (list 'zero)]
                          [(equal? 1 (caar ls)) (cdr ls)]
                          [else (cons (car ls) (normalize (cdr ls)))]))])
       (begin
@@ -162,7 +167,7 @@
 
 (define disjoint?
   (λ (fact1 fact2)
-    (equal? (zero) (cardinality (intersection fact1 fact2)))))
+    (equal? (list 'zero) (cardinality (intersection fact1 fact2)))))
 
 
 
@@ -218,7 +223,7 @@
   (λ (fact1 fact2)
     (cond
       [(or (primal-zero? fact1)
-           (primal-zero? fact2)) (zero)]
+           (primal-zero? fact2)) (list 'zero)]
       [(null? fact1) '()]
       [else (let* ([fact1-a (car (car fact1))]
                    [fact1-d (cdr (car fact1))]
@@ -294,7 +299,7 @@
 (define primal-/
   (λ (fact1 fact2)
     (cond
-      [(primal-zero? fact1) (zero)]
+      [(primal-zero? fact1) (list 'zero)]
       [(primal-zero? fact2) fact1]
       [(null? fact1) '()]
       [(< (caar fact2) (caar fact1))
