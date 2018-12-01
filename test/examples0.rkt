@@ -31,6 +31,16 @@
 
 ;;------------------------------------------------------
 ;LCM
+(define lcm
+  (λ (p1 p2)
+    (cond
+      [(null? p1) p2]
+      [(equal? (caar p1) (caar p2))
+       (cons (cons (caar p1) (max (cdar p1) (cdar p2)))
+             (lcm (cdr p1) (cdr p2)))]
+      [(< (caar p1) (caar p2))
+       (cons (car p1) (lcm (cdr p1) p2))]
+      [else (cons (car p2) (lcm p1 (cdr p2)))])))
 
 
 ;;------------------------------------------------------

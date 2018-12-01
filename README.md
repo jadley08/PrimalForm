@@ -33,7 +33,7 @@ The ^ denotes exponentiation from one integer to a Natural.
 ### Match
 
 
-## Future
+## Future Implementation
 
 ### Variables in primal number construction
 Want to allow expressions that evaluate to valid integers or naturals to be allowed in primal number construction as described in Data Type.
