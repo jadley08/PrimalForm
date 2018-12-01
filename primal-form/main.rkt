@@ -24,10 +24,7 @@
          cardinality
          disjoint?
          partition?
-         #%app
-         :)
-
-(define : ':)
+         #%app)
 
 (define-syntax (dat stx)
   (syntax-parse stx
@@ -61,10 +58,10 @@
 
 (define parse-primal
   (λ (stx)
-    (syntax-parse stx #:literals (:)
-      [(colon rest ...)
-       #:when (equal? ': (syntax-e #'colon))
-       (raise-syntax-error #f "bad syntax at : " #'colon)]
+    (syntax-parse stx
+      [(: rest ...)
+       #:when (equal? ': (syntax-e #':))
+       (raise-syntax-error #f "bad syntax at : " #':)]
       [()
        '()]
       [(p)
@@ -72,9 +69,11 @@
            (list (cons (syntax-e #'p) 1))
            (raise-syntax-error #f "expected a natural prime number" #'p))]
       [(p ^ n : rest ...)
-       #:when (equal? '^ (syntax-e #'^))
+       #:when (and (equal? '^ (syntax-e #'^))
+                   (equal? ': (syntax-e #':)))
        (parse-primal #'(p ^ n rest ...))]
       [(p : n rest ...)
+       #:when (equal? ': (syntax-e #':))
        (if (natural-prime? (syntax-e #'n))
            (parse-primal #'(p n rest ...))
            (raise-syntax-error #f "expected a natural prime number" #'n))]
