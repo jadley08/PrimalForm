@@ -25,9 +25,8 @@
          disjoint?
          partition?
          #%app
-         zero :)
+         :)
 
-(define zero 'zero)
 (define : ':)
 
 (define-syntax (dat stx)
@@ -38,13 +37,15 @@
     [(_ . e) #''e]))
 
 (define-syntax (#%app stx)
-  (syntax-parse stx #:literals (zero)
+  (syntax-parse stx
     [(_ int i)
      #:when (equal? 'int (syntax-e #'int))
      (if (integer? (syntax-e #'i))
          #''i
          (raise-syntax-error #f "expected an integer" #'i))]
-    [(_ zero) #'(list zero)]
+    [(_ zero)
+     #:when (equal? 'zero (syntax-e #'zero))
+     #'(list 'zero)]
     [(_ n rest ...)
      #:when (number? (syntax-e #'n))
      #'(base-normalize (parse-primal #'(n rest ...)))] ;here we can find a way to pass stx to parse-primal to preserve source location
@@ -109,7 +110,7 @@
   (λ (ls)
     (cond
       [(null? ls) '()]
-      [(primal-zero? ls) (zero)]
+      [(primal-zero? ls) (list 'zero)]
       [(equal? 1 (caar ls)) (cdr ls)]
       [else ls])))
 
@@ -120,7 +121,7 @@
     (letrec ([helper (λ (ls)
                        (cond
                          [(null? ls) '()]
-                         [(primal-zero? ls) (zero)]
+                         [(primal-zero? ls) (list 'zero)]
                          [(equal? 1 (caar ls)) (cdr ls)]
                          [else (cons (car ls) (normalize (cdr ls)))]))])
       (begin
@@ -167,7 +168,7 @@
 
 (define disjoint?
   (λ (fact1 fact2)
-    (equal? (zero) (cardinality (intersection fact1 fact2)))))
+    (equal? (list 'zero) (cardinality (intersection fact1 fact2)))))
 
 
 
@@ -223,7 +224,7 @@
   (λ (fact1 fact2)
     (cond
       [(or (primal-zero? fact1)
-           (primal-zero? fact2)) (zero)]
+           (primal-zero? fact2)) (list 'zero)]
       [(null? fact1) '()]
       [else (let* ([fact1-a (car (car fact1))]
                    [fact1-d (cdr (car fact1))]
@@ -299,7 +300,7 @@
 (define primal-/
   (λ (fact1 fact2)
     (cond
-      [(primal-zero? fact1) (zero)]
+      [(primal-zero? fact1) (list 'zero)]
       [(primal-zero? fact2) fact1]
       [(null? fact1) '()]
       [(< (caar fact2) (caar fact1))
