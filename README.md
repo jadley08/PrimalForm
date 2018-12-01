@@ -1,5 +1,5 @@
 # PrimalForm
-Authors: **Jacob Adley**, **Lalo Viduarri**
+Authors: **Jacob Adley** (jadley08), **Lalo Viduarri** (eduvidau)
 
 Racket domain specific language that uses integers in their prime factorization form.
 
