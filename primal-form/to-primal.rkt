@@ -86,7 +86,7 @@
                              (helper num num-root (add1 cur)))]))])
       (and (natural? num)
            (or (< num 3)
-               (helper num (sqrt 7) 2))))))
+               (helper num (sqrt num) 2))))))
 
 (define (int-or-primal->int n)
   (if (integer? n)
