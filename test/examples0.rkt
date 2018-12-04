@@ -54,3 +54,41 @@
 
 (check-true (prime? 7))
 (check-false (prime? 8))
+
+;;------------------------------------------------------
+;exp
+(define exp
+  (λ (a b n)
+    (cond
+      [(divisible? b (φ n)) 1]
+      [(and (prime? n)
+            (equal? (primal-sub1 n) b)) 1]
+      [else 'too-hard])))
+
+(define primal-^
+  (λ (n m)
+    (cond
+      [(equal? (int 0) m) 1]
+      [else (primal-* n (primal-^ n (sub1 m)))])))
+
+(define divisible?
+  (λ (p q)
+    (cond
+      [(primal-zero? q) #f]
+      [(primal-zero? p) #t]
+      [(null? q) #t]
+      [(null? p) #f]
+      [(< (caar p) (caar q))
+       (divisible? (cdr p) q)]
+      [(and (eqv? (caar p) (caar q))
+            (>= (cdar p) (cdar q)))
+       (divisible? (cdr p) (cdr q))]
+      [else #f])))
+
+
+(check-equal? (exp '((12345678987654321 . 1234) (98765678965678 . 435676434567))
+                   6
+                   7)
+              1)
+(check-equal? (exp 3 390000000000 195)
+              1)
