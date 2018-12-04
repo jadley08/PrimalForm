@@ -341,6 +341,7 @@
       [(primal-zero? fact1) (list zero-symbol)]
       [(primal-zero? fact2) fact1]
       [(null? fact1) '()]
+      [(null? fact2) fact1]
       [(< (caar fact2) (caar fact1))
        (primal-/ fact1 (cdr fact2))]
       [(eqv? (caar fact1) (caar fact2))

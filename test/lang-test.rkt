@@ -160,6 +160,8 @@
               '((3 . 2)))
 (check-equal? (primal-/ (1 ^ 7 : 3 ^ 4 : 7 ^ 3) (1 ^ 6 : 3 ^ 2 : 7 ^ 4))
               '((3 . 2)))
+(check-equal? (primal-/ (2 ^ 3 : 3 ^ 2) (2 ^ 7))
+              '((3 . 2)))
 (check-equal? (primal-/ (zero) (zero))
               (zero))
 (check-equal? (primal-/ (3 ^ 7) (zero))
