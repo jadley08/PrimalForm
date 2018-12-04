@@ -3,16 +3,13 @@
 (require rackunit)
 
 
-(define one (primal->integer 1))
-
-
 ;;------------------------------------------------------
 (define φ
   (λ (p)
     (letrec ([helper
               (λ (p)
                 (cond
-                  [(null? p) one]
+                  [(null? p) (int 1)]
                   [else (* (expt (caar p) (sub1 (cdar p)))
                            (sub1 (caar p))
                            (helper (cdr p)))]))])
@@ -50,7 +47,7 @@
    (let ([c (cardinality p)])
      (or (equal? c 0)
          (and (equal? c 1)
-              (equal? (cdar p) one))))))
+              (equal? (cdar p) (int 1)))))))
 
 (check-true (prime? 7))
 (check-false (prime? 8))
@@ -60,7 +57,7 @@
 (define exp
   (λ (a b n)
     (cond
-      [(divisible? b (φ n)) 1]
+      [(primal-divisible? b (φ n)) 1]
       [(and (prime? n)
             (equal? (primal-sub1 n) b)) 1]
       [else 'too-hard])))
@@ -70,21 +67,6 @@
     (cond
       [(equal? (int 0) m) 1]
       [else (primal-* n (primal-^ n (sub1 m)))])))
-
-(define divisible?
-  (λ (p q)
-    (cond
-      [(primal-zero? q) #f]
-      [(primal-zero? p) #t]
-      [(null? q) #t]
-      [(null? p) #f]
-      [(< (caar p) (caar q))
-       (divisible? (cdr p) q)]
-      [(and (eqv? (caar p) (caar q))
-            (>= (cdar p) (cdar q)))
-       (divisible? (cdr p) (cdr q))]
-      [else #f])))
-
 
 (check-equal? (exp '((12345678987654321 . 1234) (98765678965678 . 435676434567))
                    6

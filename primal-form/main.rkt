@@ -14,6 +14,7 @@
          primal-+ primal--
          primal-add1 primal-sub1
          primal->integer integer->primal
+         primal-divisible?
          intersection ∩
          union ∪
          primal-/
@@ -414,6 +415,42 @@
                (add-helper (cdr fact1) (cdr fact2)))]
       [else (append (list (car fact1))
                     (add-helper (cdr fact1) fact2))])))
+
+
+;                                                                      
+;                                                                      
+;                                                         ;            
+;                                                         ;            
+;                                              ;          ;            
+;                  ;            ;           ;  ;          ;            
+;     ;;;;;;                                   ;          ;            
+;   ;; ;    ;;                                 ;          ;            
+;      ;      ;                                ;          ;            
+;      ;      ;    ;  ;     ;   ;    ;;;;   ;  ;    ;;;   ;     ;;;;   
+;      ;      ;    ;  ;;    ;   ;   ;;      ;   ;  ;   ;  ;    ;;  ;   
+;      ;;     ;    ;   ;   ;    ;  ;        ;   ;;;    ;  ;    ;    ;  
+;       ;     ;    ;   ;   ;    ;  ;        ;   ;;     ;  ;   ;    ;;  
+;       ;    ;     ;   ;;  ;    ;   ;;      ;   ;      ;  ;   ;;;;;    
+;       ;    ;     ;    ;  ;    ;     ;;    ;   ;     ;   ;   ;        
+;       ;   ;      ;    ; ;     ;       ;   ;   ;    ;    ;   ;      ; 
+;       ;  ;;      ;    ; ;     ;       ;   ;   ;   ;     ;    ;   ;;  
+;       ;;;        ;     ;      ;  ;;  ;;   ;    ;;;            ;;;;   
+;      ;;                ;          ;;;;                               
+;       ;                                                              
+(define primal-divisible?
+  (λ (p q)
+    (cond
+      [(primal-zero? q) #f]
+      [(primal-zero? p) #t]
+      [(null? q) #t]
+      [(null? p) #f]
+      [(< (caar p) (caar q))
+       (primal-divisible? (cdr p) q)]
+      [(and (eqv? (caar p) (caar q))
+            (>= (cdar p) (cdar q)))
+       (primal-divisible? (cdr p) (cdr q))]
+      [else #f])))
+
 
 ;                                                                                             
 ;                                                                                             

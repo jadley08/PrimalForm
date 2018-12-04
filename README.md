@@ -67,6 +67,28 @@ Does not perform any prime factorization computation.
 ### Match
 
 
+## Implemented Functions
+```racket
+primal-+
+primal--
+primal-add1
+primal-sub1
+primal->integer
+integer->primal
+primal-divisible?
+intersection ∩
+union ∪
+primal-/
+primal-*
+primal-zero?
+primal?
+primal=?
+cardinality
+disjoint?
+partition?
+```
+
+
 ## Future Implementation
 
 ### Variables in primal number construction
