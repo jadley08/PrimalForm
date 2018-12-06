@@ -65,6 +65,10 @@ Does not perform any prime factorization computation.
 
 
 ### Match
+```racket
+[(fac num >> a b) body] ;; Binds a and b if num is a factor in the thing matched
+[(pow num >> a b) body] ;; Binds a and b if there is a factor raised to the num power
+[(to-the num1 num2 >> a b) body] ;; Binds a and b if num1 is a factor raised to the num2 power
 
 
 ## Implemented Functions
