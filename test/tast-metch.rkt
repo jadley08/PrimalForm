@@ -4,30 +4,32 @@
 
 (check-equal?
  (match 30
-   [(fac 3 a b) b]
-   [else "FUCK"])
+   [(fac 3 ≫ a b)#:when (and (number? a) (number? b)) b]
+   [else "Fail"])
  (primal->integer 1))
 
 (check-equal?
  (match 20
-   [(pow 1 a b) a]
+   [(pow 1 ≫ a b)#:when (and (number? a) (number? b)) a]
    [else "FUCK"])
  (primal->integer 5))
 
 (check-equal?
  (match 20
-   [(pow 2 a b) a]
+   [(pow 2 ≫ a b)#:when (and (number? a) (number? b)) a]
    [else "FUCK"])
  (primal->integer 2))
 
 (check-equal?
  (match 20
-   [(to-the 5 1 a b) a]
+   [(to-the 5 1 ≫ a b)#:when (and (number? a) (number? b)) a]
    [else "FUCK"])
  (primal->integer 5))
 
 (check-equal?
  (match 52
-   [(and (to-the 2 2 a b) (to-the 13 1 c d)) (integer->primal (+ a b c d))]
+   [(and (to-the 2 2 ≫ a b) (to-the 13 1 ≫ c d))#:when (and (number? a) (number? b)
+                                                        (number? c) (number? d))
+    (integer->primal (+ a b c d))]
    [else 'AAAAA])
  18)
