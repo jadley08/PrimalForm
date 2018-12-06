@@ -2,7 +2,7 @@
 
 ;; We should wrap all functions in a normalizer that simplifies negatives
 ;; should wrap take some syntax-e's out into lets
-  
+
 (require (for-syntax syntax/parse racket/syntax "./to-primal.rkt")
          "./match.rkt"
          "./to-primal.rkt"
@@ -13,6 +13,10 @@
                      #%datum)
          (rename-out [dat #%datum])
          (all-from-out "./match.rkt")
+         lowest-prime-factor lowest-prime-factor-exponent
+         largest-prime-factor largest-prime-factor-exponent
+         drop-lowest-prime-factor
+         drop-largest-prime-factor
          primal-+ primal--
          primal-add1 primal-sub1
          primal->integer integer->primal
@@ -28,6 +32,22 @@
          disjoint?
          partition?
          #%app)
+
+(define lowest-prime-factor
+  caar)
+(define lowest-prime-factor-exponent
+  cdar)
+(define largest-prime-factor
+  (λ (p)
+    (car (last p))))
+(define largest-prime-factor-exponent
+  (λ (p)
+    (cdr (last p))))
+(define drop-lowest-prime-factor
+  cdr)
+(define drop-largest-prime-factor
+  (λ (p)
+    (list-tail p 1)))
 
 (define-for-syntax no-kidding-operator '!t)
 (define-for-syntax negation-operator1  'neg)
@@ -123,7 +143,7 @@
                (cons (cons (syntax-e #'p) 1) (parse-primal #'(n rest ...)))
                (raise-syntax-error #f (format "expected a natural prime number in ~s" (syntax->datum #'n)) #'n))
            (raise-syntax-error #f (format "expected a natural prime number at ~s" (syntax->datum #'p)) #'p))]
-      [_ (raise-syntax-error #f (format "no matchin clause for ~s in parse-primal" (syntax->datum stx)) stx)])))
+      [_ (raise-syntax-error #f (format "no matching clause for ~s in parse-primal" (syntax->datum stx)) stx)])))
 
 (define !-parse-primal
   (λ (stx)
@@ -144,7 +164,7 @@
        (cons (cons (syntax-e #'p) (syntax-e #'n)) (!-parse-primal #'(rest ...)))]
       [(p n rest ...)
        (cons (cons (syntax-e #'p) 1) (!-parse-primal #'(n rest ...)))]
-      [_ (raise-syntax-error #f (format "no matchin clause for ~s in !-parse-primal" (syntax->datum stx)) stx)])))
+      [_ (raise-syntax-error #f (format "no matching clause for ~s in !-parse-primal" (syntax->datum stx)) stx)])))
 
 ;; assumes primal number is already in primal form, just removes (1 ^ _)
 (define base-normalize
