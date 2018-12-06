@@ -1,5 +1,6 @@
 #lang racket
 
+;; We should wrap all functions in a normalizer that simplifies negatives
   
 (require (for-syntax syntax/parse racket/syntax "./to-primal.rkt")
          "./match.rkt"
