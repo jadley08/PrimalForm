@@ -62,18 +62,22 @@
 
 (define primal?
   (λ (fact)
-    (letrec ([helper (λ (fact last)
-                       (cond
-                         [(null? fact) #t]
-                         [(primal-zero? fact) #t]
-                         [(equal? -1 (caar fact))
-                          (and (equal? 1 (cdar fact))
-                               (helper (cdr fact) -1))]
-                         [else (and (natural-prime? (caar fact))
-                                    (> (caar fact) last)
-                                    (natural? (cdar fact))
-                                    (helper (cdr fact) (caar fact)))]))])
-      (helper fact 0))))
+    (if (list? fact)
+        (letrec ([helper (λ (fact last)
+                           (cond
+                             [(null? fact) #t]
+                             [(primal-zero? fact) #t]
+                             [(equal? -1 (caar fact))
+                              (if (not (equal? -1 last))
+                                  (and (equal? 1 (cdar fact))
+                                       (helper (cdr fact) -1))
+                                  #f)]
+                             [else (and (natural-prime? (caar fact))
+                                        (> (caar fact) last)
+                                        (natural? (cdar fact))
+                                        (helper (cdr fact) (caar fact)))]))])
+          (helper fact 0))
+        #f)))
 
 (define natural-prime?
   (λ (num)
