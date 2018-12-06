@@ -1,6 +1,7 @@
 #lang racket
 
 ;; We should wrap all functions in a normalizer that simplifies negatives
+;; should wrap take some syntax-e's out into lets
   
 (require (for-syntax syntax/parse racket/syntax "./to-primal.rkt")
          "./match.rkt"
@@ -53,27 +54,27 @@
          (raise-syntax-error #f "expected an integer" #'i))]
     [(_ zero)
      #:when (equal? zero-symbol (syntax-e #'zero))
-     #'(list zero-symbol)]
+     #'(list zero-symbol)] ; primal 0
     [(_ ! n rest ...)
      #:when (and
              (equal? no-kidding-operator (syntax-e #'!))
              (or (equal? negation-operator1 (syntax-e #'n))
                  (equal? negation-operator2 (syntax-e #'n))))
-     #'(cons (cons -1 1) (#%app ! rest ...))]
+     #'(cons (cons -1 1) (#%app ! rest ...))] ; no kidding negative primal
     [(_ ! rest ...)
      #:when (equal? no-kidding-operator (syntax-e #'!))
-     #'(base-normalize (!-parse-primal #'(rest ...)))]
+     #'(base-normalize (!-parse-primal #'(rest ...)))] ; no kidding primal
     [(_ n rest ...)
      #:when (number? (syntax-e #'n))
-     #'(base-normalize (parse-primal #'(n rest ...)))] ;here we can find a way to pass stx to parse-primal to preserve source location
+     #'(base-normalize (parse-primal #'(n rest ...)))] ; non-negative primal
     [(_ n more rest ...)
      #:when (or (equal? negation-operator1 (syntax-e #'n))
                 (equal? negation-operator2 (syntax-e #'n)))
      (if (or (equal? negation-operator1 (syntax-e #'more))
              (equal? negation-operator2 (syntax-e #'more)))
          (raise-syntax-error #f "expected only 1 negative identifier" stx) ; #'(more ...)
-         #'(cons (cons -1 1) (#%app more rest ...)))]
-    [(_) #''()]
+         #'(cons (cons -1 1) (#%app more rest ...)))] ; negative primal
+    [(_) #''()] ; primal 1
     [(_ e args ...) #'(#%plain-app e args ...)]))
 
 (define parse-primal
@@ -81,7 +82,7 @@
     (syntax-parse stx
       [(: rest ...)
        #:when (equal? separator-symbol (syntax-e #':))
-       (raise-syntax-error #f "bad syntax at : " #':)]
+       (raise-syntax-error #f "bad syntax at : " #':)] ; : in bad position
       [()
        '()]
       [(p)
@@ -111,16 +112,16 @@
       [(p ^ n rest ...)
        #:when (equal? power-symbol (syntax-e #'^))
        (if (natural-prime? (syntax-e #'p))
-           (if (natural? (syntax-e #'n))
+           (if (and (natural? (syntax-e #'n))
+                    (not (equal? 0 (syntax-e #'n))))
                (cons (cons (syntax-e #'p) (syntax-e #'n)) (parse-primal #'(rest ...)))
-               (raise-syntax-error #f "expected a natural number" #'n))
+               (raise-syntax-error #f "expected a non-zero natural number" #'n))
            (raise-syntax-error #f "expected a natural prime number" #'p))]
       [(p n rest ...)
        (if (natural-prime? (syntax-e #'p))
-           (if (or (equal? separator-symbol (syntax-e #'n))
-                   (natural? (syntax-e #'n)))
+           (if (number? (syntax-e #'n))
                (cons (cons (syntax-e #'p) 1) (parse-primal #'(n rest ...)))
-               (raise-syntax-error #f (format "expected one of (:, ^, natural number) in ~s" (syntax->datum #'n)) #'n))
+               (raise-syntax-error #f (format "expected a natural prime number in ~s" (syntax->datum #'n)) #'n))
            (raise-syntax-error #f (format "expected a natural prime number at ~s" (syntax->datum #'p)) #'p))]
       [_ (raise-syntax-error #f (format "no matchin clause for ~s in parse-primal" (syntax->datum stx)) stx)])))
 
