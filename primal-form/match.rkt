@@ -21,8 +21,8 @@
 (define-match-expander fac
   (λ (stx)
     (syntax-case stx (≫ >>)
-      [(_ num ≫ n m) #`(app (factor num) n m)]
-      [(_ num >> n m) #`(app (factor num) n m)])))
+      [(_ num ≫ n m) #`(app (factor num) (? number? n) (? number? m))]
+      [(_ num >> n m) #`(app (factor num) (? number? n) (? number? m))])))
 
 #|Matching on the power of a num|#
 (define ((power m) prim)  
@@ -41,8 +41,8 @@
 (define-match-expander pow
   (λ (stx)
     (syntax-case stx (≫ >>)
-      [(_ num ≫ n m) #`(app (power num) n m)]
-      [(_ num >> n m) #`(app (power num) n m)])))
+      [(_ num ≫ n m) #`(app (power num) (? number? n) (? number? m))]
+      [(_ num >> n m) #`(app (power num) (? number? n) (? number? m))])))
 
 
 #|Matching on both factor and power|#
@@ -64,5 +64,5 @@
 (define-match-expander to-the
   (λ (stx)
     (syntax-case stx (≫ >>)
-      [(_ x y ≫ n m) #`(app (n-to-the-m x y) n m)]
-      [(_ x y >> n m) #`(app (n-to-the-m x y) n m)])))
+      [(_ x y ≫ n m) #`(app (n-to-the-m x y) (? number? n) (? number? m))]
+      [(_ x y >> n m) #`(app (n-to-the-m x y) (? number? n) (? number? m))])))
