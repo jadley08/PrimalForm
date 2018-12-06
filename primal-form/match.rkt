@@ -20,7 +20,7 @@
 
 (define-match-expander fac
   (λ (stx)
-    (syntax-case stx (≫)
+    (syntax-case stx (≫ >>)
       [(_ num ≫ n m) #`(app (factor num) n m)]
       [(_ num >> n m) #`(app (factor num) n m)])))
 
@@ -40,7 +40,7 @@
 
 (define-match-expander pow
   (λ (stx)
-    (syntax-case stx ()
+    (syntax-case stx (≫ >>)
       [(_ num ≫ n m) #`(app (power num) n m)]
       [(_ num >> n m) #`(app (power num) n m)])))
 
@@ -63,6 +63,6 @@
 
 (define-match-expander to-the
   (λ (stx)
-    (syntax-case stx ()
+    (syntax-case stx (≫ >>)
       [(_ x y ≫ n m) #`(app (n-to-the-m x y) n m)]
       [(_ x y >> n m) #`(app (n-to-the-m x y) n m)])))
