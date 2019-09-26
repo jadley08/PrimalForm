@@ -1,5 +1,5 @@
 #lang racket
-(require "../primal-form/match.rkt")
+(require "../match.rkt")
 
 18
 (match 9
