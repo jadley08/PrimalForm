@@ -1,1 +1,0 @@
-("7.0" ("fcc7a075ead1d0e914725c54b5c65c2fb0351742" . "0e3c79a750d482b8c807b2713c78884cab870139") (collects #"primal-form" #"to-primal.rkt") (collects #"racket" #"main.rkt") (collects #"racket" #"runtime-config.rkt") (collects #"racket" #"syntax.rkt") (collects #"syntax" #"module-reader.rkt") (collects #"syntax" #"parse.rkt"))
