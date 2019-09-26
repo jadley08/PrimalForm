@@ -10,8 +10,14 @@ Racket domain specific language that uses integers in their prime factorization 
 
 
 ## Setup Instructions
-1. Download the primal-form directory and all of its contents.
-2. Use ``raco pkg install`` to install the directory as a package.
+### DrRacket Package Manager
+1. Open package manager and install via url (add '.git') at the end.
+2. Language line at top of file should be ``#lang primal-form``.
+3. Good to go!
+
+### Manual
+1. Clone the repo.
+2. Use ``raco pkg install`` at the root of the directory to install as a package.
 3. Language line at top of file should be ``#lang primal-form``.
 4. Good to go!
 
