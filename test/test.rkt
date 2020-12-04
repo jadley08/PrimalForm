@@ -1,2 +1,0 @@
-#lang primal-form
-
