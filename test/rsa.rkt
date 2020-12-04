@@ -1,6 +1,8 @@
 #lang primal-form
 
-;; Key Generation
+;; --------------
+;; Helpers
+
 (define φ
   (λ (p)
     (letrec ([helper
@@ -12,44 +14,70 @@
                            (helper (cdr p)))]))])
       (integer->primal (helper p)))))
 
+(define gcd=1
+  (λ (n m)
+    (empty? (∩ n m))))
+
+(define get-e
+  (λ (φ-n)
+    (letrec ([helper
+              (λ (m)
+                (cond
+                  [(gcd=1 m φ-n) m]
+                  [else (helper (primal-add1 m))]))])
+      (helper 3))))
+
+(define euclidean
+  (λ (φ-n e)
+    103  ;; temporary
+    ))
+
 (define primal-^
   (λ (n m)
     (cond
       [(equal? (int 0) m) 1]
       [else (primal-* n (primal-^ n (sub1 m)))])))
 
-(define prime-p (!t 17))
-(define prime-q (!t 19))
 
-(define n     (!t 17 : 19))
-(define int-n (primal->integer n))
-(define e (int 2))
-(define d (int 3))
+;; --------------
+;; Center Constants
 
-(define public-key  (cons n e))
-(define private-key (cons n d))
+(define prime-p (!t 11))
+(define prime-q (!t 13))
 
+(define n (!t 11 : 13))
+(define φ-n (φ n))
+;; e*d = 1 mod (φ n)
+(define e (get-e φ-n))
+(define d (euclidean φ-n e))
+
+(define public-key (cons n (primal->integer e)))
+(define private-key (primal->integer d))
+
+
+;; --------------
 ;; Encryption
-(define m (random (int 2) int-n))
+(define n^ (car public-key))
+(define e^ (cdr public-key))
+
+(define m (random (int 3) (primal->integer (φ n^))))
 
 ; c ≡ m^e (mod n), compute c
-(define m^e (integer->primal (modulo (expt m e) int-n)))
-(define c (primal-+ m^e (primal-* n (integer->primal (random (int 2) (int 20))))))
+(define c (integer->primal (modulo (expt m e^) (primal->integer n^))))
 
+
+;; --------------
 ;; Decryption
+
+(define n^^ (car public-key))
+(define e^^ (cdr public-key))
+(define d^^ private-key)
+
 ; c^d ≡ m (mod n), compute m
-; know: e, m, n
-; don't know: d, m, p, q
-; know c, n
+(define c^d (primal-^ c d^^))
+(define m^ (modulo (primal->integer c^d) (primal->integer n^^)))
 
-(define φ-n (φ n))
-
-; both prime so we know relatively prim
-(define e^ (caar  φ-n))
-(define d^ (caadr φ-n))
-
-(define c^d (primal-^ c d^))
-(modulo (primal->integer c^d) (primal->integer n))
+(equal? m m^)
 
 
 
