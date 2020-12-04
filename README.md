@@ -10,8 +10,10 @@ Racket domain specific language that uses integers in their prime factorization 
 
 
 ## Setup Instructions
+Note: There will probably be some errors while installing, but they are just test failures and the language ?should? still work.
+
 ### DrRacket Package Manager
-1. Open package manager and install via url (add '.git') at the end.
+1. Open package manager and install via url (add '.git' at the end).
 2. Language line at top of file should be ``#lang primal-form``.
 3. Good to go!
 
